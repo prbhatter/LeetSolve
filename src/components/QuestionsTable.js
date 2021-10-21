@@ -1,5 +1,5 @@
 import React from "react";
-import propTypes, { array } from "prop-types";
+import propTypes from "prop-types";
 
 import {
 	TableContainer,
@@ -12,17 +12,18 @@ import {
 } from "../styles/table";
 import { Scrollable } from "../styles/scrollbar";
 
-const QuestionsTable = ({ data }) => {
+const QuestionsTable = ({ data, difficultyList }) => {
 	console.log("DATA:", data);
 	return (
 		<TableContainer>
 			<Table>
 				<colgroup>
 					{/* added new column for "question_id" */}
-					<col span="1" style={{ width: "10%" }} />
-					<col span="1" style={{ width: "60%" }} />
+					<col span="1" style={{ width: "5%" }} />
+					<col span="1" style={{ width: "54%" }} />
 					<col span="1" style={{ width: "15%" }} />
 					<col span="1" style={{ width: "15%" }} />
+					<col span="1" style={{ width: "11%" }} />
 				</colgroup>
 				<THead>
 					<Tr>
@@ -30,6 +31,7 @@ const QuestionsTable = ({ data }) => {
 						<Th>Title</Th>
 						<Th style={{ color: "pink" }}>Level</Th>
 						<Th>Status</Th>
+						<Th>Premium/Free</Th>
 					</Tr>
 				</THead>
 			</Table>
@@ -37,13 +39,25 @@ const QuestionsTable = ({ data }) => {
 			<Scrollable maxHeight="68vh">
 				<Table>
 					<colgroup>
+						<col span="1" style={{ width: "5%" }} />
+						<col span="1" style={{ width: "55%" }} />
+						<col span="1" style={{ width: "15%" }} />
+						<col span="1" style={{ width: "15%" }} />
 						<col span="1" style={{ width: "10%" }} />
-						<col span="1" style={{ width: "60%" }} />
-						<col span="1" style={{ width: "15%" }} />
-						<col span="1" style={{ width: "15%" }} />
 					</colgroup>
 					<TBody>
 						{data["stat_status_pairs"].map((que, index) => {
+
+							//If difficulty is not included in difficultyList then return null
+							if(que["difficulty"]["level"] == 1 && !difficultyList.includes("Easy")) {
+								return null;
+							}
+							if(que["difficulty"]["level"] == 2 && !difficultyList.includes("Medium")) {
+								return null;
+							}
+							if(que["difficulty"]["level"] == 3 && !difficultyList.includes("Hard")) {
+								return null;
+							}
 							return (
 								<Tr key={index}>
 									<Td>
@@ -72,6 +86,13 @@ const QuestionsTable = ({ data }) => {
 											? "Not-AC"
 											: "Not-Attempted"}
 									</Td>
+									<Td>
+										{
+											que["paid_only"] === false
+											? "Free"
+											: "Premium"
+										}
+									</Td>
 								</Tr>
 							);
 						})}
@@ -96,6 +117,7 @@ QuestionsTable.propTypes = {
 			})
 		),
 	}),
+	difficultyList: propTypes.arrayOf(propTypes.string),
 };
 
 export default QuestionsTable;

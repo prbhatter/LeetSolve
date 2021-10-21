@@ -5,7 +5,7 @@ import AcQuestionsTable from "./AcQuestionsTable"
 import NotAcQuestionsTable from "./NotAcQuestionsTable"
 import propTypes from "prop-types";
 
-const TableContent = ({ data, category }) => {
+const TableContent = ({ data, category, difficultyList }) => {
 
     //  This component checks the category and returns the corresponding component accordingly
 
@@ -13,22 +13,22 @@ const TableContent = ({ data, category }) => {
 
         case 'All Questions' : 
             return (
-                <QuestionsTable data={data} />
+                <QuestionsTable data={data} difficultyList={difficultyList} />
             );
         
         case 'Attempted' : 
             return (
-                <AttemptedQuestionsTable data={data} />
+                <AttemptedQuestionsTable data={data} difficultyList={difficultyList} />
             );
         
         case 'Accepted' : 
             return (
-                <AcQuestionsTable data={data} />
+                <AcQuestionsTable data={data} difficultyList={difficultyList} />
             );
         
         case 'Not Accepted' : 
             return (
-                <NotAcQuestionsTable data={data} />
+                <NotAcQuestionsTable data={data} difficultyList={difficultyList} />
             );
         
         default : 
@@ -55,6 +55,7 @@ TableContent.propTypes = {
 		),
 	}),
     category: propTypes.string,
+    difficultyList: propTypes.arrayOf(propTypes.string),
 };
 
 export default TableContent;

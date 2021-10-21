@@ -1,5 +1,5 @@
 import React from "react";
-import propTypes, { array } from "prop-types";
+import propTypes from "prop-types";
 
 import {
 	TableContainer,
@@ -12,21 +12,26 @@ import {
 } from "../styles/table";
 import { Scrollable } from "../styles/scrollbar";
 
-const NotAcQuestionsTable = ({ data }) => {
+const NotAcQuestionsTable = ({ data, difficultyList }) => {
 	console.log("DATA:", data);
 	return (
 		<TableContainer>
 			<Table>
 				<colgroup>
-					<col span="1" style={{ width: "70%" }} />
+					{/* added new column for "question_id" */}
+					<col span="1" style={{ width: "5%" }} />
+					<col span="1" style={{ width: "54%" }} />
 					<col span="1" style={{ width: "15%" }} />
 					<col span="1" style={{ width: "15%" }} />
+					<col span="1" style={{ width: "11%" }} />
 				</colgroup>
 				<THead>
 					<Tr>
+						<Th>ID</Th>
 						<Th style={{ color: "00f2ff" }}>Title</Th>
 						<Th style={{ color: "pink" }}>Level</Th>
 						<Th style={{ color: "00fff5" }}>Status</Th>
+						<Th>Premium/Free</Th>
 					</Tr>
 				</THead>
 			</Table>
@@ -34,9 +39,11 @@ const NotAcQuestionsTable = ({ data }) => {
 			<Scrollable maxHeight="68vh">
 				<Table>
 					<colgroup>
-						<col span="1" style={{ width: "70%" }} />
+						<col span="1" style={{ width: "5%" }} />
+						<col span="1" style={{ width: "55%" }} />
 						<col span="1" style={{ width: "15%" }} />
 						<col span="1" style={{ width: "15%" }} />
+						<col span="1" style={{ width: "10%" }} />
 					</colgroup>
 					<TBody>
 						{data["stat_status_pairs"].map((que, index) => {
@@ -44,9 +51,23 @@ const NotAcQuestionsTable = ({ data }) => {
 								//if not notac then return null
 								return null;
 							}
+
+							//If difficulty is not included in difficultyList then return null
+							if(que["difficulty"]["level"] == 1 && !difficultyList.includes("Easy")) {
+								return null;
+							}
+							if(que["difficulty"]["level"] == 2 && !difficultyList.includes("Medium")) {
+								return null;
+							}
+							if(que["difficulty"]["level"] == 3 && !difficultyList.includes("Hard")) {
+								return null;
+							}
 							//if notac then return as a row for the table
 							return (
 								<Tr key={index}>
+									<Td>
+										{que["stat"]["frontend_question_id"]}
+									</Td>
 									<Td>
 										<a
 											href={`https://leetcode.com/problems/${que["stat"]["question__title_slug"]}`}
@@ -69,6 +90,13 @@ const NotAcQuestionsTable = ({ data }) => {
 											: que["status"] === "notac"
 											? "Not-AC"
 											: "Not-Attempted"}
+									</Td>
+									<Td>
+										{
+											que["paid_only"] === false
+											? "Free"
+											: "Premium"
+										}
 									</Td>
 								</Tr>
 							);
@@ -94,6 +122,7 @@ NotAcQuestionsTable.propTypes = {
 			})
 		),
 	}),
+	difficultyList: propTypes.arrayOf(propTypes.string),
 };
 
 export default NotAcQuestionsTable;
