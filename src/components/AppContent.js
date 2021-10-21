@@ -19,6 +19,9 @@ const AppContent = ({ response, setResponse, handleLoggingOut }) => {
 
 	const handleCategoryClick = (category) => {
 		setActiveCategory(category); //change the currently active category
+		if(category === 'LogOut') {
+			handleLoggingOut();
+		}
 	};
 
 	const handleDifficultySelect = (e) => {
