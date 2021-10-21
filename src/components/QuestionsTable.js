@@ -11,27 +11,56 @@ import {
 	Td,
 } from "../styles/table";
 import { Scrollable } from "../styles/scrollbar";
+import { ShuffleButton } from "../styles/shufflestyle";
+//import shuffle_image from "../static/images/icon.png";
 
-const QuestionsTable = ({ data, difficultyList }) => {
+const QuestionsTable = ({ data, onShuffle, difficultyList }) => {
 	console.log("DATA:", data);
+	console.log(typeof shuffle_image);
 	return (
 		<TableContainer>
 			<Table>
 				<colgroup>
 					{/* added new column for "question_id" */}
-					<col span="1" style={{ width: "5%" }} />
-					<col span="1" style={{ width: "54%" }} />
-					<col span="1" style={{ width: "15%" }} />
-					<col span="1" style={{ width: "15%" }} />
-					<col span="1" style={{ width: "11%" }} />
+					<col span="1" style={{ width: "9%" }} />
+					<col span="1" style={{ width: "55%" }} />
+					<col span="1" style={{ width: "12%" }} />
+					<col span="1" style={{ width: "12%" }} />
+					<col span="1" style={{ width: "12%" }} />
 				</colgroup>
 				<THead>
 					<Tr>
 						<Th>ID</Th>
-						<Th>Title</Th>
+						<Th>
+							{/* <a href="#" style={shufflestyle}>
+								<img
+									src="src/static/images/random.png"
+									style={{
+										float: "left",
+										width: "2rem",
+									}}
+									onClick={onShuffle}
+									// title="Pick one Random Problem"
+								/>
+								<span>Pick one Random Problem</span>
+							</a> */}
+							<ShuffleButton>
+								<img
+									src="src/static/images/random.png"
+									style={{
+										float: "left",
+										width: "2rem",
+									}}
+									onClick={onShuffle}
+									// title="Pick one Random Problem"
+								/>
+								<span>Pick one Random Question</span>
+							</ShuffleButton>
+							Title
+						</Th>
 						<Th style={{ color: "pink" }}>Level</Th>
 						<Th>Status</Th>
-						<Th>Premium/Free</Th>
+						<Th>Paid</Th>
 					</Tr>
 				</THead>
 			</Table>
@@ -39,11 +68,11 @@ const QuestionsTable = ({ data, difficultyList }) => {
 			<Scrollable maxHeight="68vh">
 				<Table>
 					<colgroup>
-						<col span="1" style={{ width: "5%" }} />
+						<col span="1" style={{ width: "9%" }} />
 						<col span="1" style={{ width: "55%" }} />
-						<col span="1" style={{ width: "15%" }} />
-						<col span="1" style={{ width: "15%" }} />
-						<col span="1" style={{ width: "10%" }} />
+						<col span="1" style={{ width: "12%" }} />
+						<col span="1" style={{ width: "12%" }} />
+						<col span="1" style={{ width: "12%" }} />
 					</colgroup>
 					<TBody>
 						{data["stat_status_pairs"].map((que, index) => {
@@ -87,11 +116,9 @@ const QuestionsTable = ({ data, difficultyList }) => {
 											: "Not-Attempted"}
 									</Td>
 									<Td>
-										{
-											que["paid_only"] === false
-											? "Free"
-											: "Premium"
-										}
+										{que["paid_only"] === true
+											? "Premium"
+											: "Free"}
 									</Td>
 								</Tr>
 							);
@@ -118,6 +145,7 @@ QuestionsTable.propTypes = {
 		),
 	}),
 	difficultyList: propTypes.arrayOf(propTypes.string),
+	onShuffle: propTypes.func,
 };
 
 export default QuestionsTable;

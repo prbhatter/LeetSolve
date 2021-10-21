@@ -11,27 +11,41 @@ import {
 	Td,
 } from "../styles/table";
 import { Scrollable } from "../styles/scrollbar";
+import { ShuffleButton } from "../styles/shufflestyle";
 
-const AcQuestionsTable = ({ data, difficultyList }) => {
+const AcQuestionsTable = ({ data, onShuffle, difficultyList }) => {
 	console.log("DATA:", data);
 	return (
 		<TableContainer>
 			<Table>
 				<colgroup>
-					{/* added new column for "question_id" */}
-					<col span="1" style={{ width: "5%" }} />
-					<col span="1" style={{ width: "54%" }} />
-					<col span="1" style={{ width: "15%" }} />
-					<col span="1" style={{ width: "15%" }} />
-					<col span="1" style={{ width: "11%" }} />
+					<col span="1" style={{ width: "9%" }} />
+					<col span="1" style={{ width: "55%" }} />
+					<col span="1" style={{ width: "12%" }} />
+					<col span="1" style={{ width: "12%" }} />
+					<col span="1" style={{ width: "12%" }} />
 				</colgroup>
 				<THead>
 					<Tr>
 						<Th>ID</Th>
-						<Th style={{ color: "00f2ff" }}>Title</Th>
+						<Th style={{ color: "00f2ff" }}>
+							<ShuffleButton>
+								<img
+									src="src/static/images/random.png"
+									style={{
+										float: "left",
+										width: "2rem",
+									}}
+									onClick={onShuffle}
+									// title="Pick one Random Problem"
+								/>
+								<span>Pick one Random Question</span>
+							</ShuffleButton>
+							Title
+						</Th>
 						<Th style={{ color: "pink" }}>Level</Th>
 						<Th style={{ color: "00fff5" }}>Status</Th>
-						<Th>Premium/Free</Th>
+						<Th>Paid</Th>
 					</Tr>
 				</THead>
 			</Table>
@@ -39,11 +53,11 @@ const AcQuestionsTable = ({ data, difficultyList }) => {
 			<Scrollable maxHeight="68vh">
 				<Table>
 					<colgroup>
-						<col span="1" style={{ width: "5%" }} />
+						<col span="1" style={{ width: "9%" }} />
 						<col span="1" style={{ width: "55%" }} />
-						<col span="1" style={{ width: "15%" }} />
-						<col span="1" style={{ width: "15%" }} />
-						<col span="1" style={{ width: "10%" }} />
+						<col span="1" style={{ width: "12%" }} />
+						<col span="1" style={{ width: "12%" }} />
+						<col span="1" style={{ width: "12%" }} />
 					</colgroup>
 					<TBody>
 						{data["stat_status_pairs"].map((que, index) => {
@@ -92,11 +106,9 @@ const AcQuestionsTable = ({ data, difficultyList }) => {
 											: "Not-Attempted"}
 									</Td>
 									<Td>
-										{
-											que["paid_only"] === false
-											? "Free"
-											: "Premium"
-										}
+										{que["paid_only"] === true
+											? "Premium"
+											: "Free"}
 									</Td>
 								</Tr>
 							);
@@ -123,6 +135,7 @@ AcQuestionsTable.propTypes = {
 		),
 	}),
 	difficultyList: propTypes.arrayOf(propTypes.string),
+	onShuffle: propTypes.func,
 };
 
 export default AcQuestionsTable;

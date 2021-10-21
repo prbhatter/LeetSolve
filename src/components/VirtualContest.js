@@ -1,5 +1,5 @@
-import React from "react";
-import propTypes from "prop-types";
+import React, { useState } from "react";
+import propTypes, { array } from "prop-types";
 
 import {
 	TableContainer,
@@ -10,11 +10,9 @@ import {
 	Th,
 	Td,
 } from "../styles/table";
-import { Scrollable } from "../styles/scrollbar";
-import { ShuffleButton } from "../styles/shufflestyle";
-
-const NotAcQuestionsTable = ({ data, onShuffle, difficultyList }) => {
-	console.log("DATA:", data);
+function VirtualContest() {
+	const [contest, setContest] = useState(false);
+	const HandleVirtualContest = () => {};
 	return (
 		<TableContainer>
 			<Table>
@@ -29,18 +27,15 @@ const NotAcQuestionsTable = ({ data, onShuffle, difficultyList }) => {
 					<Tr>
 						<Th>ID</Th>
 						<Th style={{ color: "00f2ff" }}>
-							<ShuffleButton>
-								<img
-									src="src/static/images/random.png"
-									style={{
-										float: "left",
-										width: "2rem",
-									}}
-									onClick={onShuffle}
-									// title="Pick one Random Problem"
-								/>
-								<span>Pick one Random Question</span>
-							</ShuffleButton>
+							<img
+								src="src/static/images/random.png"
+								style={{
+									float: "left",
+									width: "2rem",
+								}}
+								onClick={onShuffle}
+								title="Pick one Random Problem"
+							/>{" "}
 							Title
 						</Th>
 						<Th style={{ color: "pink" }}>Level</Th>
@@ -63,17 +58,6 @@ const NotAcQuestionsTable = ({ data, onShuffle, difficultyList }) => {
 						{data["stat_status_pairs"].map((que, index) => {
 							if (!(que["status"] === "notac")) {
 								//if not notac then return null
-								return null;
-							}
-
-							//If difficulty is not included in difficultyList then return null
-							if(que["difficulty"]["level"] == 1 && !difficultyList.includes("Easy")) {
-								return null;
-							}
-							if(que["difficulty"]["level"] == 2 && !difficultyList.includes("Medium")) {
-								return null;
-							}
-							if(que["difficulty"]["level"] == 3 && !difficultyList.includes("Hard")) {
 								return null;
 							}
 							//if notac then return as a row for the table
@@ -118,24 +102,6 @@ const NotAcQuestionsTable = ({ data, onShuffle, difficultyList }) => {
 			</Scrollable>
 		</TableContainer>
 	);
-};
+}
 
-NotAcQuestionsTable.propTypes = {
-	data: propTypes.shape({
-		stat_status_pairs: propTypes.arrayOf(
-			propTypes.shape({
-				difficulty: propTypes.shape({ level: propTypes.number }),
-				stat: propTypes.shape({
-					question__title: propTypes.string,
-					question__title_slug: propTypes.string,
-				}),
-				level: propTypes.number,
-				status: propTypes.string,
-			})
-		),
-	}),
-	difficultyList: propTypes.arrayOf(propTypes.string),
-	onShuffle: propTypes.func,
-};
-
-export default NotAcQuestionsTable;
+export default VirtualContest;

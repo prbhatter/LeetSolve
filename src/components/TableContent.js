@@ -1,43 +1,35 @@
 import React from "react";
 import QuestionsTable from "./QuestionsTable";
 import AttemptedQuestionsTable from "./AttemptedQuestionsTable";
-import AcQuestionsTable from "./AcQuestionsTable"
-import NotAcQuestionsTable from "./NotAcQuestionsTable"
+import AcQuestionsTable from "./AcQuestionsTable";
+import NotAcQuestionsTable from "./NotAcQuestionsTable";
+import VirtualContest from "./VirtualContest";
 import propTypes from "prop-types";
 
-const TableContent = ({ data, category, difficultyList }) => {
+const TableContent = ({ data, category, onShuffle, difficultyList }) => {
+	//  This component checks the category and returns the corresponding component accordingly
 
-    //  This component checks the category and returns the corresponding component accordingly
+	switch (category) {
+		case "All Questions":
+			return <QuestionsTable data={data} onShuffle={onShuffle} difficultyList={difficultyList} />;
 
-    switch(category) {
+		case "Attempted":
+			return (
+				<AttemptedQuestionsTable data={data} onShuffle={onShuffle} difficultyList={difficultyList} />
+			);
 
-        case 'All Questions' : 
-            return (
-                <QuestionsTable data={data} difficultyList={difficultyList} />
-            );
-        
-        case 'Attempted' : 
-            return (
-                <AttemptedQuestionsTable data={data} difficultyList={difficultyList} />
-            );
-        
-        case 'Accepted' : 
-            return (
-                <AcQuestionsTable data={data} difficultyList={difficultyList} />
-            );
-        
-        case 'Not Accepted' : 
-            return (
-                <NotAcQuestionsTable data={data} difficultyList={difficultyList} />
-            );
-        
-        default : 
-            return (
-                null
-            )
+		case "Accepted":
+			return <AcQuestionsTable data={data} onShuffle={onShuffle} difficultyList={difficultyList} />;
 
-    }
-
+		case "Not Accepted":
+			return <NotAcQuestionsTable data={data} onShuffle={onShuffle} difficultyList={difficultyList} />;
+		
+		case "Virtual Contest":
+			return <VirtualContest data={data} difficultyList={difficultyList} />;
+		
+		default:
+			return null;
+	}
 };
 
 TableContent.propTypes = {
@@ -56,6 +48,7 @@ TableContent.propTypes = {
 	}),
     category: propTypes.string,
     difficultyList: propTypes.arrayOf(propTypes.string),
+	onShuffle: propTypes.func,
 };
 
 export default TableContent;
